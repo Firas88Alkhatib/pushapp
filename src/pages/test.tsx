@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import styles from './test.module.scss'
 
 // const registerWorker = async () => {
 //   const registeration = await navigator.serviceWorker.register('./worker.ts')
@@ -34,7 +33,7 @@ const isSupported = async () => {
 
 const PUBLIC_KEY = 'BH_2jIJP4OrEYhhkUNqawRjKB6JbvDr2SnQR1fr1KmHYO5ZdiZGyb0YsYFKxByg5HmgECFo_MafpA_3BGQv-xxw'
 
-export const Test = () => {
+const Test = () => {
   const [permission, setPermission] = useState<PermissionState | NotificationPermission>()
   const [subscription, setSubscription] = useState<PushSubscription>()
   const [registration, setRegistration] = useState<ServiceWorkerRegistration>()
@@ -93,7 +92,7 @@ export const Test = () => {
     console.log('web push unsubscribed!')
   }
   return (
-    <div className={styles.test}>
+    <div>
       {permission !== 'granted' ? (
         <button onClick={async () => await Notification.requestPermission()}>ask permission</button>
       ) : (
@@ -109,3 +108,5 @@ export const Test = () => {
     </div>
   )
 }
+
+export default Test
