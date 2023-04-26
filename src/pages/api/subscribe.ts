@@ -18,23 +18,22 @@ webPush.setVapidDetails('mailto:firas88alkhatib@gmail.com', vapidKeys.publicKey,
 
 const respo = { title: 'Hello Web Push', message: 'Your web push notification is here!' }
 
-let subscribtions: any = []
-
-setInterval(async () => {
-  subscribtions.forEach(async (sub: any) => {
-    console.log('subs:', subscribtions)
+export const sendNotification = async () => {
+  console.log('received push')
+  console.log('subs:', (global as any).subscribtions)
+  ;(global as any).subscribtions.forEach(async (sub: any) => {
     const result = await webPush.sendNotification(sub, JSON.stringify(respo))
     console.log('webPush Result: ', result)
   })
-}, 10000)
+}
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === 'POST') {
-    subscribtions.push(req.body)
+    ;(global as any).subscribtions.push(req.body)
   }
   if (req.method === 'PUT') {
     console.log('delete body', req.body.endpoint)
-    subscribtions = subscribtions.filter((sub: any) => {
+    ;(global as any).subscribtions = (global as any).subscribtions.filter((sub: any) => {
       sub.endpoint === req.body.endpoint
     })
   }
