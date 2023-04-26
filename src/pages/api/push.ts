@@ -15,15 +15,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const subscription = await client.get(key)
       console.log('key and value', key, subscription)
       if (subscription) {
-        await webPush.sendNotification(
-          JSON.parse(subscription)!,
-          JSON.stringify({ title: 'Hello Web Push', message: 'Your web push notification is here!' })
-        )
+        try {
+          const sendResult = await webPush.sendNotification(
+            JSON.parse(subscription)!,
+            JSON.stringify({ title: 'Hello Web Push', message: 'Your web push notification is here!' })
+          )
+          console.log('webpush result', sendResult)
+        } catch (error) {
+          console.log('[Push API ERORR] : ---------------------------------------- \n]', error)
+        }
       }
     }
     // await client.disconnect()
   } catch (e) {
-    console.log('[Push ERORR] : ---------------------------------------- \n]', e)
+    console.log('[Push block ERORR] : ---------------------------------------- \n]', e)
   }
   res.status(200).json({ result: 'done' })
 }
