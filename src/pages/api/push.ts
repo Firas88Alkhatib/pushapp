@@ -1,8 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { sendNotification } from './subscribe'
+import { client } from '../../storeService'
+import { webPush } from '../../pushService'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('sending push')
-  await sendNotification()
+  client.connect()
+  const keys = await client.keys('*')
+  console.log('allkeeeeys', keys)
+  for (const key of keys) {
+    const subscription = await client.get(key)
+    console.log('key and value', key, subscription)
+    if (subscription) {
+      webPush.sendNotification(
+        JSON.parse(subscription)!,
+        JSON.stringify({ title: 'Hello Web Push', message: 'Your web push notification is here!' })
+      )
+    }
+  }
+  client.disconnect()
   res.status(200).json({ result: 'done' })
 }
