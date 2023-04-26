@@ -4,7 +4,7 @@ import { webPush } from '../../pushService'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('sending push')
-  client.connect()
+  await client.connect()
   const keys = await client.keys('*')
   console.log('allkeeeeys', keys)
   for (const key of keys) {
@@ -17,6 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
     }
   }
-  client.disconnect()
+  await client.disconnect()
   res.status(200).json({ result: 'done' })
 }
