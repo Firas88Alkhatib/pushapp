@@ -53,12 +53,12 @@ const Test = () => {
   }, [])
   useEffect(() => {
     setPermission(Notification.permission)
-    navigator.permissions.query({ name: 'notifications' }).then((permStatus) => {
-      permStatus.onchange = () => {
-        console.log('permstate', permStatus.state)
-        setPermission(permStatus.state)
-      }
-    })
+    // navigator.permissions.query({ name: 'notifications' }).then((permStatus) => {
+    //   permStatus.onchange = () => {
+    //     console.log('permstate', permStatus.state)
+    //     setPermission(permStatus.state)
+    //   }
+    // })
   }, [])
 
   const subscribeButtonOnClick = async () => {
