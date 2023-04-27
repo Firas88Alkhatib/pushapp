@@ -37,17 +37,23 @@ const Test = () => {
   const [permission, setPermission] = useState<PermissionState | NotificationPermission>()
   const [subscription, setSubscription] = useState<PushSubscription>()
   const [registration, setRegistration] = useState<ServiceWorkerRegistration>()
+  const [error, setError] = useState('')
   // const [registration, setRegistration] = useState<ServiceWorkerRegistration>()
 
   useEffect(() => {
     const init = async () => {
-      if (!isSupported()) return
-      // const registeration = await registerWorker()
-      const reg = await navigator.serviceWorker.ready
-      const sub = await reg.pushManager.getSubscription()
-      console.log(sub)
-      setRegistration(reg)
-      if (sub) setSubscription(sub)
+      try {
+        if (!isSupported()) return
+        // const registeration = await registerWorker()
+        const reg = await navigator.serviceWorker.ready
+        const sub = await reg.pushManager.getSubscription()
+        console.log(sub)
+        setRegistration(reg)
+        if (sub) setSubscription(sub)
+      } catch (error: any) {
+        console.log(error)
+        setError(JSON.stringify(error))
+      }
     }
     init()
   }, [])
@@ -94,7 +100,10 @@ const Test = () => {
   return (
     <div>
       {permission !== 'granted' ? (
-        <button onClick={async () => await Notification.requestPermission()}>ask permission</button>
+        <>
+          <button onClick={async () => await Notification.requestPermission()}>ask permission</button>
+          <p>{error}</p>
+        </>
       ) : (
         <>
           <button onClick={subscribeButtonOnClick} disabled={!!subscription}>
